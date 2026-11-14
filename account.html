@@ -1,1 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SLITEHUB INTERNET | Account</title>
 
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #08111f;
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 430px;
+    background: #111f32;
+    border: 1px solid #263b52;
+    border-radius: 18px;
+    padding: 28px;
+}
+
+.logo {
+    text-align: center;
+    font-size: 23px;
+    font-weight: bold;
+    color: #38e58b;
+    margin-bottom: 10px;
+}
+
+.logo span {
+    color: white;
+}
+
+.subtitle {
+    text-align: center;
+    color: #91a2b8;
+    font-size: 13px;
+    margin-bottom: 25px;
+}
+
+.tabs {
+    display: flex;
+    background: #1a2a40;
+    padding: 5px;
+    border-radius: 9px;
+    margin-bottom: 22px;
+}
+
+.tabs button {
+    width: 50%;
+    padding: 12px;
+    border: none;
+    border-radius: 7px;
+    background: transparent;
+    color: #aabbd0;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.tabs button.active {
+    background: #20b977;
+    color: #06170f;
+}
+
+.form {
+    display: none;
+}
+
+.form.active {
+    display: block;
+}
+
+label {
+    display: block;
+    color: #c4d1e0;
+    font-size: 12px;
+    margin: 14px 0 7px;
+}
+
+input {
+    width: 100%;
+    padding: 14px;
+    border-radius: 8px;
+    border: 1px solid #30435c;
+    background: #0b192b;
+    color: white;
+    outline: none;
+}
+
+input:focus {
+    border-color: #38e58b;
+}
+
+.submit {
+    width: 100%;
+    padding: 14px;
+    margin-top: 22px;
+    border: none;
+    border-radius: 9px;
+    background: #20b977;
+    color: #06170f;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.submit:disabled {
+    opacity: .6;
+    cursor: wait;
+}
+
+.message {
+    margin-top: 18px;
+    font-size: 13px;
+    text-align: center;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.back {
+    display: block;
+    text-align: center;
+    color: #38e58b;
+    text-decoration: none;
+    margin-top: 22px;
+    font-size: 13px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="logo">SLITEHUB <span>INTERNET</span></div>
+
+    <p class="subtitle">
+        Create your account and access our services.
+    </p>
+
+    <div class="tabs">
+        <button id="registerTab" class="active"
+        onclick="showForm('register')">Register</button>
+
+        <button id="loginTab"
+        onclick="showForm('login')">Login</button>
+    </div>
+
+    <!-- REGISTRATION -->
+
+    <form id="registerForm" class="form active">
+
+        <label>Full Name</label>
+        <input type="text" id="fullName"
+        placeholder="Enter your full name" required>
+
+        <label>Phone Number</label>
+        <input type="tel" id="phone"
+        placeholder="08012345678" required>
+
+        <label>Email Address</label>
+        <input type="email" id="registerEmail"
+        placeholder="Enter your email" required>
+
+        <label>Password</label>
+        <input type="password" id="registerPassword"
+        placeholder="At least 8 characters" minlength="8" required>
+
+        <label>Confirm Password</label>
+        <input type="password" id="confirmPassword"
+        placeholder="Confirm your password" minlength="8" required>
+
+        <button class="submit" id="registerButton" type="submit">
+            CREATE ACCOUNT
+        </button>
+
+    </form>
+
+    <!-- LOGIN -->
+
+    <form id="loginForm" class="form">
+
+        <label>Email Address</label>
+        <input type="email" id="loginEmail"
+        placeholder="Enter your email" required>
+
+        <label>Password</label>
+        <input type="password" id="loginPassword"
+        placeholder="Enter your password" required>
+
+        <button class="submit" id="loginButton" type="submit">
+            LOGIN TO ACCOUNT
+        </button>
+
+    </form>
+
+    <div id="message" class="message"></div>
+
+    <a href="index.html" class="back">← Back to Home</a>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+
+<script>
+
+function showForm(type) {
+
+    document.querySelectorAll(".form")
+    .forEach(form => form.classList.remove("active"));
+
+    document.querySelectorAll(".tabs button")
+    .forEach(button => button.classList.remove("active"));
+
+    if (type === "register") {
+        document.getElementById("registerForm").classList.add("active");
+        document.getElementById("registerTab").classList.add("active");
+    } else {
+        document.getElementById("loginForm").classList.add("active");
+        document.getElementById("loginTab").classList.add("active");
+    }
+
+    document.getElementById("message").textContent = "";
+}
+
+function showMessage(text, success = false) {
+    const box = document.getElementById("message");
+    box.textContent = text;
+    box.style.color = success ? "#38e58b" : "#ff8585";
+}
+
+// REGISTRATION
+
+document.getElementById("registerForm")
+.addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+
+    const button = document.getElementById("registerButton");
+    const fullName = document.getElementById("fullName").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const email = document.getElementById("registerEmail").value.trim();
+    const password = document.getElementById("registerPassword").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+
+    if (password !== confirmPassword) {
+        showMessage("Your passwords do not match.");
+        return;
+    }
+
+    if (!/^[0-9+ ]{10,16}$/.test(phone)) {
+        showMessage("Enter a valid phone number.");
+        return;
+    }
+
+    button.disabled = true;
+    button.textContent = "CREATING ACCOUNT...";
+
+    try {
+
+        const { data, error } = await supabaseClient.auth.signUp({
+            email: email,
+            password: password,
+            options: {
+                data: {
+                    full_name: fullName,
+                    phone: phone
+                }
+            }
+        });
+
+        if (error) throw error;
+
+        showMessage(
+            "Registration submitted! Check your email for a confirmation link if email confirmation is enabled. Then return here to log in.",
+            true
+        );
+
+        document.getElementById("registerForm").reset();
+
+    } catch(error) {
+
+        showMessage(error.message);
+
+    } finally {
+
+        button.disabled = false;
+        button.textContent = "CREATE ACCOUNT";
+
+    }
+
+});
+
+// LOGIN
+
+document.getElementById("loginForm")
+.addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+
+    const button = document.getElementById("loginButton");
+    const email = document.getElementById("loginEmail").value.trim();
+    const password = document.getElementById("loginPassword").value;
+
+    button.disabled = true;
+    button.textContent = "LOGGING IN...";
+
+    try {
+
+        const { data, error } = await supabaseClient.auth.signInWithPassword({
+            email: email,
+            password: password
+        });
+
+        if (error) throw error;
+
+        showMessage("Login successful! Opening your dashboard...", true);
+
+        setTimeout(() => {
+            window.location.href = "index.html";
+        }, 1200);
+
+    } catch(error) {
+
+        showMessage(error.message);
+
+    } finally {
+
+        button.disabled = false;
+        button.textContent = "LOGIN TO ACCOUNT";
+
+    }
+
+});
+
+</script>
+
+</body>
+</html>
