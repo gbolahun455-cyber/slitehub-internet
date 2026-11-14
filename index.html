@@ -3,218 +3,223 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SLITEHUB INTERNET</title>
-
+<title>SLITEHUB INTERNET | Dashboard</title>
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    background: #08111f;
-    color: white;
-    font-family: Arial, sans-serif;
-}
-
-header {
-    padding: 22px 7%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #101d30;
-    border-bottom: 1px solid #23334a;
-}
-
-.logo {
-    font-size: 21px;
-    font-weight: bold;
-    color: #36e0b0;
-}
-
-.status {
-    color: #36e0b0;
-    font-size: 12px;
-}
-
-.hero {
-    text-align: center;
-    padding: 90px 20px 65px;
-    background: radial-gradient(circle at top, #183b55, #08111f 70%);
-}
-
-.hero h1 {
-    font-size: clamp(35px, 8vw, 60px);
-    margin-bottom: 18px;
-}
-
-.hero h1 span {
-    color: #36e0b0;
-}
-
-.hero p {
-    color: #b9c7d8;
-    line-height: 1.8;
-    max-width: 550px;
-    margin: auto;
-}
-
-.badge {
-    display: inline-block;
-    margin-bottom: 25px;
-    padding: 9px 17px;
-    border: 1px solid #36e0b0;
-    border-radius: 30px;
-    color: #36e0b0;
-    font-size: 12px;
-}
-
-.button {
-    display: inline-block;
-    margin-top: 30px;
-    padding: 15px 30px;
-    border-radius: 8px;
-    background: #36e0b0;
-    color: #07131c;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.section {
-    padding: 55px 7%;
-    text-align: center;
-}
-
-.section h2 {
-    font-size: 29px;
-    margin-bottom: 15px;
-}
-
-.section > p {
-    color: #aebdce;
-    line-height: 1.7;
-}
-
-.cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-    gap: 20px;
-    margin-top: 35px;
-}
-
-.card {
-    padding: 28px 20px;
-    background: #132239;
-    border: 1px solid #263b54;
-    border-radius: 14px;
-}
-
-.card .icon {
-    font-size: 32px;
-    margin-bottom: 15px;
-}
-
-.card h3 {
-    margin-bottom: 12px;
-    color: #36e0b0;
-}
-
-.card p {
-    color: #aebdce;
-    line-height: 1.6;
-    font-size: 14px;
-}
-
-.notice {
-    margin: 20px auto;
-    max-width: 650px;
-    padding: 25px;
-    border: 1px solid #36e0b0;
-    border-radius: 12px;
-    color: #c5d5e5;
-    line-height: 1.8;
-}
-
-footer {
-    padding: 30px 15px;
-    text-align: center;
-    background: #101d30;
-    color: #91a2b6;
-    font-size: 13px;
-    line-height: 2;
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Arial,sans-serif;background:#08111f;color:#fff}
+header{height:70px;background:#101d30;border-bottom:1px solid #263b54;display:flex;align-items:center;justify-content:space-between;padding:0 6%;position:sticky;top:0;z-index:10}
+.logo{font-size:19px;font-weight:bold;color:#36e0b0}
+.profile{background:#20334a;border-radius:50%;width:38px;height:38px;display:grid;place-items:center}
+.container{max-width:1100px;margin:auto;padding:30px 18px}
+.welcome{margin-bottom:25px}
+.welcome h1{font-size:27px;margin-bottom:8px}
+.muted{color:#9eafc2;font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;margin:25px 0}
+.card{background:#132239;border:1px solid #263b54;border-radius:15px;padding:22px}
+.card small{color:#aabbd0}
+.amount{font-size:29px;font-weight:bold;margin:13px 0;color:#36e0b0}
+.card h3{margin-bottom:12px}
+.section-title{font-size:21px;margin:35px 0 17px}
+.packages{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.package{background:#132239;border:1px solid #263b54;padding:23px;border-radius:14px}
+.package h3{color:#36e0b0;margin-bottom:12px}
+.price{font-size:25px;font-weight:bold;margin:15px 0}
+button{border:0;background:#36e0b0;color:#07131c;padding:12px 17px;border-radius:8px;font-weight:bold;cursor:pointer;width:100%}
+button:hover{background:#25c99c}
+input,select{width:100%;padding:14px;background:#0b1728;border:1px solid #30445d;border-radius:8px;color:white;margin:10px 0 16px;outline:none}
+.form-card{max-width:550px}
+table{width:100%;border-collapse:collapse;min-width:450px}
+th,td{text-align:left;padding:15px;border-bottom:1px solid #263b54;font-size:13px}
+th{color:#36e0b0}
+.table-wrap{overflow-x:auto;background:#132239;border-radius:12px;padding:10px}
+.badge{color:#ffd166;background:#3c321c;padding:6px 10px;border-radius:20px;font-size:11px}
+.notice{background:#172d38;border:1px solid #287b69;padding:16px;border-radius:10px;color:#c5e8df;line-height:1.6;font-size:13px;margin:20px 0}
+nav{display:flex;gap:18px;align-items:center}
+nav a{color:#c6d4e5;text-decoration:none;font-size:13px}
+footer{text-align:center;color:#8295aa;padding:30px;background:#101d30;margin-top:45px;font-size:12px}
+.hidden{display:none}
+@media(max-width:650px){
+header{padding:0 17px}
+nav{gap:10px}
+nav a{font-size:11px}
+.logo{font-size:15px}
+.container{padding:24px 14px}
+.welcome h1{font-size:23px}
 }
 </style>
 </head>
-
 <body>
 
 <header>
-    <div class="logo">SLITEHUB INTERNET</div>
-    <div class="status">● PROJECT ONLINE</div>
+ <div class="logo">SLITEHUB INTERNET</div>
+ <nav>
+  <a href="#dashboard">Home</a>
+  <a href="#packages">Packages</a>
+  <a href="#request">Request</a>
+ </nav>
+ <div class="profile">👤</div>
 </header>
 
-<section class="hero">
-    <div class="badge">A NEW CONNECTIVITY PROJECT</div>
+<main class="container" id="dashboard">
 
-    <h1>Connecting People.<br>
-    <span>Expanding Possibilities.</span></h1>
+ <div class="welcome">
+  <p class="muted">CUSTOMER PORTAL</p>
+  <h1>Welcome to SLITEHUB 👋</h1>
+  <p class="muted">Your connectivity dashboard.</p>
+ </div>
 
-    <p>
-        Welcome to SLITEHUB INTERNET.
-        We are developing an innovative internet connectivity
-        platform designed to explore smarter ways of connecting people.
-    </p>
+ <div class="notice">
+  <strong>Development preview:</strong> This dashboard is currently a demonstration. No real data transfers or payments are processed yet.
+ </div>
 
-    <a href="#about" class="button">Explore Project</a>
-</section>
+ <div class="grid">
+  <div class="card">
+   <small>Wallet Balance</small>
+   <div class="amount">₦0.00</div>
+   <p class="muted">Demo balance</p>
+  </div>
 
-<section class="section" id="about">
-    <h2>About Our Project</h2>
+  <div class="card">
+   <small>Available Data</small>
+   <div class="amount">0 GB</div>
+   <p class="muted">No data allocated yet</p>
+  </div>
 
-    <p>
-        Our goal is to develop a simple and accessible
-        connectivity platform.
-    </p>
+  <div class="card">
+   <small>Sharing Requests</small>
+   <div class="amount" id="requestCount">0</div>
+   <p class="muted">Requests submitted</p>
+  </div>
+ </div>
 
-    <div class="cards">
+ <h2 class="section-title" id="packages">Available Data Packages</h2>
 
-        <div class="card">
-            <div class="icon">🌍</div>
-            <h3>Connectivity</h3>
-            <p>Exploring ways to make internet connectivity more accessible.</p>
-        </div>
+ <div class="packages">
 
-        <div class="card">
-            <div class="icon">🔐</div>
-            <h3>Security</h3>
-            <p>Security and responsible network access are important to our project.</p>
-        </div>
+  <div class="package">
+   <h3>MTN Data</h3>
+   <p class="muted">1 GB data package</p>
+   <div class="price">₦500</div>
+   <button onclick="choosePackage('1 GB','₦500')">Select Package</button>
+  </div>
 
-        <div class="card">
-            <div class="icon">📡</div>
-            <h3>Innovation</h3>
-            <p>Building new ideas around internet access and technology.</p>
-        </div>
+  <div class="package">
+   <h3>MTN Data</h3>
+   <p class="muted">2 GB data package</p>
+   <div class="price">₦1,000</div>
+   <button onclick="choosePackage('2 GB','₦1,000')">Select Package</button>
+  </div>
 
-    </div>
-</section>
+  <div class="package">
+   <h3>MTN Data</h3>
+   <p class="muted">5 GB data package</p>
+   <div class="price">₦2,500</div>
+   <button onclick="choosePackage('5 GB','₦2,500')">Select Package</button>
+  </div>
 
-<section class="section">
-    <h2>Project Development</h2>
+ </div>
 
-    <div class="notice">
-        SLITEHUB INTERNET is currently under development.
-        Internet access services are not yet available.
-        Updates will be announced when testing is complete.
-    </div>
-</section>
+ <h2 class="section-title" id="request">Request Data Sharing</h2>
+
+ <div class="card form-card">
+  <form id="requestForm">
+   <label>Selected package</label>
+   <select id="package" required>
+    <option value="">Choose a package</option>
+    <option value="1 GB">1 GB</option>
+    <option value="2 GB">2 GB</option>
+    <option value="5 GB">5 GB</option>
+   </select>
+
+   <label>Beneficiary phone number</label>
+   <input id="phone" type="tel" placeholder="Enter phone number" maxlength="15" required>
+
+   <label>Network</label>
+   <select id="network">
+    <option value="MTN">MTN</option>
+   </select>
+
+   <button type="submit">Submit Sharing Request</button>
+  </form>
+ </div>
+
+ <h2 class="section-title">Recent Transactions</h2>
+
+ <div class="table-wrap">
+  <table>
+   <thead>
+    <tr>
+     <th>Package</th>
+     <th>Phone</th>
+     <th>Status</th>
+    </tr>
+   </thead>
+   <tbody id="transactions">
+    <tr>
+     <td colspan="3" class="muted">No transactions yet.</td>
+    </tr>
+   </tbody>
+  </table>
+ </div>
+
+</main>
 
 <footer>
-    <strong>SLITEHUB INTERNET</strong><br>
-    Tech • Creative • Digital • Lifestyle<br>
-    © 2026 SLITEHUB. All rights reserved.
+ <strong>SLITEHUB INTERNET</strong><br><br>
+ Tech • Creative • Digital • Lifestyle<br>
+ © 2026 SLITEHUB. All rights reserved.
 </footer>
+
+<script>
+let requests = 0;
+
+function choosePackage(size,price){
+ document.getElementById("package").value=size;
+ document.getElementById("request").scrollIntoView({behavior:"smooth"});
+}
+
+document.getElementById("requestForm").addEventListener("submit",function(e){
+ e.preventDefault();
+
+ const size=document.getElementById("package").value;
+ const phone=document.getElementById("phone").value.trim();
+
+ if(!/^[0-9]{10,15}$/.test(phone)){
+  alert("Please enter a valid phone number.");
+  return;
+ }
+
+ requests++;
+ document.getElementById("requestCount").textContent=requests;
+
+ const table=document.getElementById("transactions");
+
+ if(requests===1){
+  table.innerHTML="";
+ }
+
+ const row=document.createElement("tr");
+
+ const packageCell=document.createElement("td");
+ packageCell.textContent=size;
+
+ const phoneCell=document.createElement("td");
+ phoneCell.textContent=phone;
+
+ const statusCell=document.createElement("td");
+ const badge=document.createElement("span");
+ badge.className="badge";
+ badge.textContent="Demo request";
+ statusCell.appendChild(badge);
+
+ row.append(packageCell,phoneCell,statusCell);
+ table.prepend(row);
+
+ alert("Demo request recorded. No real data has been transferred.");
+
+ this.reset();
+});
+</script>
 
 </body>
 </html>
