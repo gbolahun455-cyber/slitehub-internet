@@ -1,1 +1,68 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SLITEHUB Connection Test</title>
+<style>
+body {
+    background: #08111f;
+    color: white;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 40px 15px;
+}
+.box {
+    background: #13243a;
+    padding: 25px;
+    border-radius: 15px;
+    max-width: 420px;
+    margin: 40px auto;
+}
+h2 { color: #38e58b; }
+button {
+    background: #20b977;
+    border: none;
+    padding: 13px 22px;
+    border-radius: 8px;
+    font-weight: bold;
+}
+#result { margin-top: 20px; line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<div class="box">
+    <h2>SLITEHUB INTERNET</h2>
+    <p>Database Connection Test</p>
+    <button onclick="testConnection()">TEST CONNECTION</button>
+    <div id="result">Waiting for test...</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+
+<script>
+async function testConnection() {
+    const result = document.getElementById("result");
+    result.textContent = "Connecting to database...";
+
+    try {
+        const { data, error } = await supabaseClient
+            .from("packages")
+            .select("name, data_amount, price");
+
+        if (error) throw error;
+
+        result.innerHTML =
+            "✅ DATABASE CONNECTED SUCCESSFULLY!<br><br>" +
+            "Packages found: " + data.length;
+    } catch (error) {
+        result.textContent = "❌ CONNECTION ERROR: " + error.message;
+    }
+}
+</script>
+
+</body>
+</html>
