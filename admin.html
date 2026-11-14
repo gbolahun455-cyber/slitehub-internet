@@ -1,1 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SLITEHUB INTERNET | Admin</title>
 
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#08111f;color:#fff}
+header{background:#101d30;padding:20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #26364c}
+.logo{font-size:20px;font-weight:bold;color:#38e58b}
+.logo span{color:white}
+.badge{background:#263b35;color:#58f0a2;padding:7px 11px;border-radius:20px;font-size:11px}
+.container{padding:20px;max-width:1200px;margin:auto}
+h1{font-size:25px;margin:15px 0 8px}
+.subtitle{color:#91a2b8;font-size:13px;margin-bottom:22px}
+.notice{background:#332a12;border:1px solid #8a6b20;padding:13px;border-radius:10px;color:#f7d77a;font-size:12px;margin-bottom:22px;line-height:1.6}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:13px;margin-bottom:25px}
+.card{background:#111f32;border:1px solid #24364d;padding:18px;border-radius:13px}
+.card p{color:#9aacc2;font-size:12px;margin-bottom:12px}
+.card h2{font-size:25px;color:#45e895}
+.card small{color:#71869e;font-size:11px}
+.section{background:#111f32;border:1px solid #24364d;padding:18px;border-radius:13px;margin-bottom:20px}
+.section h3{font-size:17px;margin-bottom:16px}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:520px}
+th,td{text-align:left;padding:13px 10px;border-bottom:1px solid #26364c;font-size:12px}
+th{color:#91a2b8}
+.empty{text-align:center;color:#91a2b8;padding:25px}
+button{border:0;padding:9px 12px;border-radius:7px;font-weight:bold;cursor:pointer}
+.approve{background:#1b9e63;color:white}
+.reject{background:#a93645;color:white}
+.tabs{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:18px}
+.tab{background:#1b2b40;color:#b9c9dc}
+.tab.active{background:#20b977;color:#06170f}
+.panel{display:none}
+.panel.active{display:block}
+.package{display:flex;justify-content:space-between;align-items:center;background:#192a40;padding:15px;border-radius:10px;margin:10px 0}
+.package strong{color:#43e99a}
+footer{text-align:center;color:#72849b;padding:25px;font-size:12px}
+@media(max-width:500px){header{padding:15px}.container{padding:14px}h1{font-size:22px}}
+</style>
+</head>
+
+<body>
+
+<header>
+ <div class="logo">SLITEHUB <span>INTERNET</span></div>
+ <div class="badge">ADMIN PREVIEW</div>
+</header>
+
+<main class="container">
+
+<h1>Admin Dashboard</h1>
+<p class="subtitle">Manage your SLITEHUB INTERNET platform.</p>
+
+<div class="notice">
+<strong>DEMO MODE:</strong> This is a frontend preview. Customer accounts,
+payments, approvals and MTN data transfers are not connected yet.
+Do not use this page to approve real transactions.
+</div>
+
+<div class="stats">
+ <div class="card">
+  <p>Total Customers</p>
+  <h2>0</h2>
+  <small>Registered accounts</small>
+ </div>
+ <div class="card">
+  <p>Pending Requests</p>
+  <h2 id="pending">0</h2>
+  <small>Awaiting review</small>
+ </div>
+ <div class="card">
+  <p>Completed Requests</p>
+  <h2>0</h2>
+  <small>Demo records</small>
+ </div>
+ <div class="card">
+  <p>Total Revenue</p>
+  <h2>₦0</h2>
+  <small>Recorded payments</small>
+ </div>
+</div>
+
+<div class="section">
+ <div class="tabs">
+  <button class="tab active" onclick="showPanel('requests',this)">Requests</button>
+  <button class="tab" onclick="showPanel('customers',this)">Customers</button>
+  <button class="tab" onclick="showPanel('transactions',this)">Transactions</button>
+  <button class="tab" onclick="showPanel('packages',this)">Packages</button>
+ </div>
+
+ <div id="requests" class="panel active">
+  <h3>Data Sharing Requests</h3>
+  <div class="table-wrap">
+   <table>
+    <thead>
+     <tr><th>Customer</th><th>Phone</th><th>Package</th><th>Status</th></tr>
+    </thead>
+    <tbody>
+     <tr><td colspan="4" class="empty">No requests available yet.</td></tr>
+    </tbody>
+   </table>
+  </div>
+ </div>
+
+ <div id="customers" class="panel">
+  <h3>Registered Customers</h3>
+  <p class="empty">No registered customers yet.</p>
+ </div>
+
+ <div id="transactions" class="panel">
+  <h3>Transaction History</h3>
+  <p class="empty">No transactions recorded yet.</p>
+ </div>
+
+ <div id="packages" class="panel">
+  <h3>Available Data Packages</h3>
+
+  <div class="package">
+   <div><strong>1 GB</strong><br><small>MTN Data Package</small></div>
+   <strong>₦500</strong>
+  </div>
+
+  <div class="package">
+   <div><strong>2 GB</strong><br><small>MTN Data Package</small></div>
+   <strong>₦1,000</strong>
+  </div>
+
+  <div class="package">
+   <div><strong>5 GB</strong><br><small>MTN Data Package</small></div>
+   <strong>₦2,500</strong>
+  </div>
+
+  <p style="color:#91a2b8;font-size:11px;margin-top:12px">
+   Demo prices only. Actual packages and prices must be verified.
+  </p>
+ </div>
+</div>
+
+</main>
+
+<footer>SLITEHUB INTERNET · TECH • CREATIVE • DIGITAL</footer>
+
+<script>
+function showPanel(id,button){
+ document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+ document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+ button.classList.add('active');
+}
+</script>
+
+</body>
+  </html>
