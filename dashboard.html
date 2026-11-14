@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SLITEHUB INTERNET | Dashboard</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+body{background:#08111f;color:white;min-height:100vh}
+header{background:#101d30;padding:18px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #26364c}
+.logo{font-size:19px;font-weight:bold;color:#38e58b}
+.logo span{color:white}
+.logout{background:#a93645;color:white;border:0;padding:10px 13px;border-radius:7px}
+.container{max-width:1100px;margin:auto;padding:20px}
+.welcome{margin:15px 0 22px}
+.welcome h1{font-size:25px;margin-bottom:8px}
+.welcome p{color:#91a2b8;font-size:13px}
+.notice{background:#332a12;border:1px solid #8a6b20;color:#f7d77a;padding:13px;border-radius:10px;font-size:12px;line-height:1.6;margin-bottom:20px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:13px;margin-bottom:23px}
+.card{background:#111f32;border:1px solid #24364d;padding:17px;border-radius:12px}
+.card p{font-size:12px;color:#91a2b8;margin-bottom:10px}
+.card h2{font-size:23px;color:#38e58b}
+.section{background:#111f32;border:1px solid #24364d;border-radius:13px;padding:19px;margin-bottom:20px}
+.section h3{font-size:17px;margin-bottom:16px}
+.packages{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
+.package{background:#192a40;padding:16px;border:1px solid #30435c;border-radius:11px}
+.package h2{color:#38e58b;margin-bottom:8px}
+.package p{font-size:12px;color:#aabbd0;margin-bottom:12px}
+.package button{width:100%;padding:10px;background:#20b977;border:0;border-radius:7px;font-weight:bold}
+label{display:block;font-size:12px;color:#c4d1e0;margin:14px 0 7px}
+input,select{width:100%;padding:13px;background:#0b192b;border:1px solid #30435c;color:white;border-radius:8px;outline:none}
+.submit{width:100%;padding:14px;margin-top:18px;background:#20b977;border:0;border-radius:8px;font-weight:bold}
+button{cursor:pointer}
+.message{font-size:13px;line-height:1.6;margin-top:15px;overflow-wrap:anywhere}
+.table-wrap{overflow-x:auto}
+table{width:100%;min-width:450px;border-collapse:collapse}
+th,td{text-align:left;padding:13px 9px;border-bottom:1px solid #26364c;font-size:12px}
+th{color:#91a2b8}
+.empty{text-align:center;color:#91a2b8;padding:22px}
+.status{color:#f7d77a}
+footer{text-align:center;padding:25px;color:#71869e;font-size:12px}
+</style>
+</head>
+
+<body>
+
+<header>
+ <div class="logo">SLITEHUB <span>INTERNET</span></div>
+ <button class="logout" onclick="logout()">LOGOUT</button>
+</header>
+
+<main class="container">
+
+ <div class="welcome">
+  <h1>Welcome, <span id="customerName">Customer</span>!</h1>
+  <p>Manage your data-sharing requests from one place.</p>
+ </div>
+
+ <div class="notice">
+  <strong>IMPORTANT:</strong> This is the first connected version.
+  Requests are saved in your database, but actual MTN data transfers
+  and payments are not yet connected.
+ </div>
+
+ <div class="stats">
+  <div class="card">
+   <p>Available Packages</p>
+   <h2 id="packageCount">0</h2>
+  </div>
+
+  <div class="card">
+   <p>My Requests</p>
+   <h2 id="requestCount">0</h2>
+  </div>
+
+  <div class="card">
+   <p>Pending Requests</p>
+   <h2 id="pendingCount">0</h2>
+  </div>
+ </div>
+
+ <section class="section">
+  <h3>Available MTN Packages</h3>
+  <div class="packages" id="packages">
+   <p class="empty">Loading packages...</p>
+  </div>
+ </section>
+
+ <section class="section">
+  <h3>Submit a Data-Sharing Request</h3>
+
+  <form id="requestForm">
+
+   <label>Select Data Package</label>
+   <select id="packageSelect" required>
+    <option value="">Loading packages...</option>
+   </select>
+
+   <label>Beneficiary Phone Number</label>
+   <input type="tel" id="beneficiaryPhone"
+   placeholder="Enter recipient phone number" required>
+
+   <button class="submit" id="requestButton" type="submit">
+    SUBMIT REQUEST
+   </button>
+
+  </form>
+
+  <div id="message" class="message"></div>
+ </section>
+
+ <section class="section">
+  <h3>My Request History</h3>
+
+  <div class="table-wrap">
+   <table>
+    <thead>
+     <tr>
+      <th>Package</th>
+      <th>Phone Number</th>
+      <th>Amount</th>
+      <th>Status</th>
+     </tr>
+    </thead>
+    <tbody id="history">
+     <tr><td colspan="4" class="empty">Loading...</td></tr>
+    </tbody>
+   </table>
+  </div>
+ </section>
+
+</main>
+
+<footer>
+ SLITEHUB INTERNET · TECH • CREATIVE • DIGITAL
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+
+<script>
+let currentUser = null;
+let packageList = [];
+
+async function startDashboard() {
+ try {
+  const {data,error} = await supabaseClient.auth.getUser();
+
+  if(error || !data.user) {
+   window.location.href = "account.html";
+   return;
+  }
+
+  currentUser = data.user;
+
+  const {data:profile,error:profileError} = await supabaseClient
+   .from("profiles")
+   .select("full_name")
+   .eq("id",currentUser.id)
+   .single();
+
+  if(profileError) throw profileError;
+
+  document.getElementById("customerName").textContent =
+   profile.full_name || "Customer";
+
+  await loadPackages();
+  await loadRequests();
+
+ } catch(error) {
+  document.getElementById("message").textContent =
+   "Dashboard error: " + error.message;
+ }
+}
+
+async function loadPackages() {
+ const {data,error} = await supabaseClient
+  .from("packages")
+  .select("id,name,data_amount,price")
+  .eq("active",true)
+  .order("price");
+
+ if(error) throw error;
+
+ packageList = data || [];
+
+ document.getElementById("packageCount").textContent =
+  packageList.length;
+
+ const display = document.getElementById("packages");
+ const select = document.getElementById("packageSelect");
+
+ display.innerHTML = "";
+ select.innerHTML = '<option value="">Choose a package</option>';
+
+ packageList.forEach(item => {
+
+  const card = document.createElement("div");
+  card.className = "package";
+
+  const title = document.createElement("h2");
+  title.textContent = item.data_amount;
+
+  const name = document.createElement("p");
+  name.textContent = item.name;
+
+  const price = document.createElement("p");
+  price.textContent = "₦" + Number(item.price).toLocaleString("en-NG");
+
+  const button = document.createElement("button");
+  button.textContent = "SELECT PACKAGE";
+  button.onclick = () => {
+   select.value = item.id;
+   document.getElementById("requestForm").scrollIntoView({
+    behavior:"smooth"
+   });
+  };
+
+  card.append(title,name,price,button);
+  display.appendChild(card);
+
+  const option = document.createElement("option");
+  option.value = item.id;
+  option.textContent = item.data_amount + " — ₦" +
+   Number(item.price).toLocaleString("en-NG");
+
+  select.appendChild(option);
+ });
+
+ if(packageList.length === 0) {
+  display.innerHTML = '<p class="empty">No packages available.</p>';
+ }
+}
+
+async function loadRequests() {
+
+ const {data,error} = await supabaseClient
+  .from("data_requests")
+  .select("id,beneficiary_phone,amount,status,created_at,packages(name,data_amount)")
+  .eq("user_id",currentUser.id)
+  .order("created_at",{ascending:false});
+
+ if(error) throw error;
+
+ const requests = data || [];
+
+ document.getElementById("requestCount").textContent =
+  requests.length;
+
+ document.getElementById("pendingCount").textContent =
+  requests.filter(r => r.status === "pending").length;
+
+ const history = document.getElementById("history");
+ history.innerHTML = "";
+
+ if(requests.length === 0) {
+  history.innerHTML =
+   '<tr><td colspan="4" class="empty">No requests yet.</td></tr>';
+  return;
+ }
+
+ requests.forEach(request => {
+  const row = document.createElement("tr");
+
+  const packageName = request.packages
+   ? request.packages.data_amount
+   : "Package";
+
+  const values = [
+   packageName,
+   request.beneficiary_phone,
+   "₦" + Number(request.amount).toLocaleString("en-NG"),
+   request.status.toUpperCase()
+  ];
+
+  values.forEach(value => {
+   const cell = document.createElement("td");
+   cell.textContent = value;
+   row.appendChild(cell);
+  });
+
+  history.appendChild(row);
+ });
+}
+
+document.getElementById("requestForm")
+.addEventListener("submit",async function(event) {
+
+ event.preventDefault();
+
+ const button = document.getElementById("requestButton");
+ const message = document.getElementById("message");
+
+ const packageId = document.getElementById("packageSelect").value;
+ const phone = document.getElementById("beneficiaryPhone").value.trim();
+
+ const selectedPackage = packageList.find(
+  item => String(item.id) === String(packageId)
+ );
+
+ if(!selectedPackage) {
+  message.textContent = "Please select a valid package.";
+  return;
+ }
+
+ if(!/^[0-9+ ]{10,16}$/.test(phone)) {
+  message.textContent = "Enter a valid phone number.";
+  return;
+ }
+
+ button.disabled = true;
+ button.textContent = "SUBMITTING...";
+
+ try {
+
+  const {error} = await supabaseClient
+   .from("data_requests")
+   .insert({
+    user_id:currentUser.id,
+    package_id:selectedPackage.id,
+    beneficiary_phone:phone,
+    amount:selectedPackage.price
+   });
+
+  if(error) throw error;
+
+  message.style.color = "#38e58b";
+  message.textContent =
+   "Your request has been saved successfully. It is awaiting review. No data has been transferred.";
+
+  document.getElementById("requestForm").reset();
+
+  await loadRequests();
+
+ } catch(error) {
+
+  message.style.color = "#ff8585";
+  message.textContent = "Request failed: " + error.message;
+
+ } finally {
+
+  button.disabled = false;
+  button.textContent = "SUBMIT REQUEST";
+
+ }
+
+});
+
+async function logout() {
+ await supabaseClient.auth.signOut();
+ window.location.href = "account.html";
+}
+
+startDashboard();
+</script>
+
+</body>
+</html>
